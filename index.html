@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gray_Mops</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--bg2:#1a1d27;--card:#1e2235;--card2:#252840;
+  --acc:#6c7ae0;--acc2:#8b5cf6;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+  --t1:#e8eaf6;--t2:#8b92b8;--t3:#5a6080;
+  --br:rgba(108,122,224,.15);--br2:rgba(108,122,224,.25);
+  --sh:0 8px 32px rgba(0,0,0,.45);
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+[data-theme=light]{
+  --bg:#eef0fb;--bg2:#fff;--card:#fff;--card2:#eef0fb;
+  --acc:#4f5ec8;--t1:#1a1d2e;--t2:#4a5080;--t3:#9090b8;
+  --br:rgba(79,94,200,.15);--br2:rgba(79,94,200,.28);
+  --sh:0 8px 32px rgba(79,94,200,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--t1);
+  min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden;
+  transition:background .3s var(--ease),color .3s var(--ease)}
+
+/* ── HEADER ── */
+.hdr{background:var(--bg2);border-bottom:1px solid var(--br);
+  padding:13px 16px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);
+  transition:background .3s var(--ease)}
+.logo{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;
+  color:var(--t1);letter-spacing:1px;transition:color .3s var(--ease)}
+.logo span{color:var(--acc)}
+.hdr-btns{display:flex;gap:8px}
+.hbtn{width:34px;height:34px;border-radius:50%;background:var(--card);
+  border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--t2);font-size:13px;font-weight:700;
+  transition:all .2s var(--ease);user-select:none}
+.hbtn:hover{border-color:var(--acc);color:var(--acc);transform:scale(1.08)}
+.hbtn:active{transform:scale(.93)}
+
+/* ── PAGES ── */
+.page{display:none;padding:16px;padding-bottom:90px}
+.page.active{display:block;animation:pgIn .32s var(--ease)}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+
+/* ── NAV ── */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;background:var(--bg2);border-top:1px solid var(--br);
+  display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0);
+  transition:background .3s var(--ease)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:9px 4px 7px;cursor:pointer;color:var(--t3);gap:3px;
+  user-select:none;transition:color .18s;position:relative}
+.ni::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:0;height:2px;background:var(--acc);border-radius:2px 2px 0 0;
+  transition:width .22s var(--ease)}
+.ni.active{color:var(--acc)}
+.ni.active::after{width:28px}
+.ni svg{width:21px;height:21px;stroke-width:1.8;transition:transform .18s}
+.ni.active svg{transform:scale(1.12)}
+.ni span{font-size:9px;letter-spacing:.8px;text-transform:uppercase;font-weight:600}
+
+/* ── GENERIC ── */
+.lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--t3);margin-bottom:9px;margin-top:18px}
+.lbl:first-child{margin-top:0}
+.card{background:var(--card);border-radius:15px;border:1px solid var(--br);
+  padding:14px;margin-bottom:11px;box-shadow:var(--sh);
+  transition:background .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── META ── */
+.meta-card{background:var(--card);border-radius:15px;border:1px solid var(--br);
+  padding:14px;margin-bottom:11px;overflow:hidden;box-shadow:var(--sh);
+  transition:background .3s var(--ease)}
+.meta-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.meta-ttl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3)}
+.meta-nav{display:flex;gap:6px}
+.mnb{width:28px;height:28px;border-radius:50%;border:1px solid var(--br2);
+  background:var(--card2);color:var(--t2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all .18s var(--ease);user-select:none}
+.mnb:hover{background:var(--acc);color:#fff;border-color:var(--acc);transform:scale(1.1)}
+.mnb:active{transform:scale(.9)}
+.meta-role{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:13px;color:var(--t2)}
+.hero-grid{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.hero-grid::-webkit-scrollbar{display:none}
+.htmb{flex-shrink:0;width:70px;border-radius:11px;overflow:hidden;
+  border:1.5px solid var(--br);cursor:pointer;
+  transition:transform .18s var(--ease),border-color .18s,box-shadow .18s}
+.htmb:hover{transform:scale(1.08) translateY(-2px);border-color:var(--acc);
+  box-shadow:0 4px 16px rgba(108,122,224,.3)}
+.htmb:active{transform:scale(.95)}
+.htmb-img{width:100%;height:54px;object-fit:cover;display:block;
+  background:var(--card2);font-size:9px;color:var(--t3)}
+.htmb-wr{text-align:center;font-size:11px;font-weight:700;color:var(--green);
+  padding:2px 0 3px;background:var(--card2)}
+.meta-dots{display:flex;gap:5px;margin-top:10px}
+.mdot{height:3px;border-radius:2px;background:var(--br2);transition:all .3s var(--ease);width:20px}
+.mdot.active{background:var(--acc);width:28px}
+
+/* ── QUICK ── */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+.qcard{background:var(--card);border-radius:15px;border:1px solid var(--br);
+  padding:13px 12px;display:flex;flex-direction:column;min-height:115px;
+  cursor:pointer;transition:all .2s var(--ease);box-shadow:var(--sh)}
+.qcard:hover{border-color:var(--acc);transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(108,122,224,.22)}
+.qcard:active{transform:scale(.97)}
+.ql{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.qd{font-size:12px;color:var(--t2);flex:1;line-height:1.5}
+.qlink{font-size:12px;color:var(--acc);margin-top:9px;font-weight:700}
+
+/* ── PATCH ── */
+.pi{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--br);cursor:pointer;
+  transition:padding-left .15s}
+.pi:hover{padding-left:4px}
+.pi:last-child{border-bottom:none}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:10px;flex-shrink:0}
+.pname{font-size:14px;font-weight:500}
+.pdate{font-size:12px;color:var(--t3)}
+
+/* ── BTNS ── */
+.brow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.bo{padding:12px;border-radius:11px;border:1px solid var(--br2);
+  background:transparent;color:var(--t2);font-size:13px;
+  font-family:'Nunito',sans-serif;cursor:pointer;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .18s var(--ease)}
+.bo:hover{background:var(--card2);color:var(--t1);border-color:var(--acc)}
+.bo:active{transform:scale(.97)}
+.bo.red{border-color:rgba(239,68,68,.3);color:#ef4444}
+.bo.red:hover{background:rgba(239,68,68,.1)}
+.btn{width:100%;padding:13px;border-radius:12px;background:var(--acc);
+  color:#fff;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;
+  border:none;cursor:pointer;transition:all .18s var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:6px}
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(108,122,224,.4)}
+.btn:active{transform:scale(.98)}
+.btn.purple{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.btn.green{background:linear-gradient(135deg,#16a34a,#22c55e)}
+
+/* ── QUIZ PAGE ── */
+.qz-card{background:var(--card);border-radius:17px;border:1px solid var(--br);
+  padding:17px;margin-bottom:13px;box-shadow:var(--sh);
+  transition:background .3s var(--ease)}
+.qz-ttl{font-size:16px;font-weight:700;margin-bottom:6px}
+.qz-desc{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:13px}
+.qz-flow{display:none}
+.qz-prog{height:4px;background:var(--br);border-radius:2px;margin-bottom:18px;overflow:hidden}
+.qz-bar{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));
+  border-radius:2px;transition:width .38s var(--ease)}
+.qz-q{font-size:18px;font-weight:700;margin-bottom:5px;line-height:1.4}
+.qz-sub{font-size:13px;color:var(--t2);margin-bottom:18px}
+.qz-opt{background:var(--card2);border:1.5px solid var(--br);border-radius:13px;
+  padding:13px 15px;margin-bottom:8px;cursor:pointer;font-size:14px;font-weight:500;
+  transition:all .18s var(--ease);display:flex;align-items:center;gap:10px}
+.qz-opt:hover{border-color:var(--acc);background:rgba(108,122,224,.09);transform:translateX(3px)}
+.qz-opt.sel{border-color:var(--acc);background:rgba(108,122,224,.18)}
+.qz-ico{font-size:20px;flex-shrink:0}
+
+/* ── SKILL QUIZ GAME ── */
+.sg-wrap{animation:pgIn .3s var(--ease)}
+.sg-score{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px}
+.sg-score-val{font-size:22px;font-weight:700;color:var(--acc)}
+.sg-score-lbl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px}
+.sg-lives{display:flex;gap:5px;font-size:18px}
+.sg-q{font-size:16px;font-weight:700;margin-bottom:4px;line-height:1.4}
+.sg-qsub{font-size:13px;color:var(--t2);margin-bottom:16px}
+.sg-skills{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.sg-skill{background:var(--card2);border:2px solid var(--br);border-radius:14px;
+  padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;transition:all .2s var(--ease);position:relative;overflow:hidden}
+.sg-skill:hover{border-color:var(--acc);transform:scale(1.03);
+  box-shadow:0 4px 16px rgba(108,122,224,.25)}
+.sg-skill:active{transform:scale(.97)}
+.sg-skill.correct{border-color:var(--green)!important;background:rgba(34,197,94,.12)!important;animation:pulse-green .4s}
+.sg-skill.wrong{border-color:var(--red)!important;background:rgba(239,68,68,.12)!important;animation:shake .35s}
+.sg-skill.reveal{border-color:var(--green)!important;background:rgba(34,197,94,.08)!important}
+.sg-skill-img{width:72px;height:72px;border-radius:12px;object-fit:cover;
+  background:var(--card);display:block}
+.sg-skill-name{font-size:12px;font-weight:700;text-align:center;line-height:1.3}
+.sg-skill-hero{font-size:11px;color:var(--t3);text-align:center}
+.sg-fb{font-size:16px;font-weight:700;text-align:center;margin:8px 0 14px;min-height:26px;
+  transition:all .2s var(--ease)}
+.sg-fb.ok{color:var(--green)}
+.sg-fb.bad{color:var(--red)}
+.sg-result{background:var(--card);border-radius:17px;border:1px solid var(--br);
+  padding:24px;text-align:center;box-shadow:var(--sh)}
+.sg-result-emoji{font-size:56px;margin-bottom:12px}
+.sg-result-score{font-size:32px;font-weight:700;color:var(--acc);margin-bottom:4px}
+.sg-result-lbl{font-size:14px;color:var(--t2);margin-bottom:18px}
+.sg-streak{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;
+  border-radius:20px;background:rgba(108,122,224,.15);border:1px solid var(--br2);
+  font-size:13px;color:var(--acc);font-weight:700;margin-bottom:16px}
+@keyframes pulse-green{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 4px rgba(34,197,94,.3)}}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ── DRAFTER ── */
+.dft-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
+.dft-ttl{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:1px}
+.dft-sec{background:var(--card);border-radius:15px;border:1px solid var(--br);
+  padding:13px;margin-bottom:11px;box-shadow:var(--sh);
+  transition:background .3s var(--ease)}
+.dft-sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.dft-lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%}
+.dot-r{background:var(--red)}
+.dot-b{background:var(--acc)}
+.slots{display:flex;gap:7px}
+.slot{width:58px;height:58px;border-radius:11px;
+  border:1.5px dashed var(--br2);background:var(--card2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;transition:all .2s var(--ease);overflow:hidden}
+.slot.filled{border-style:solid;border-color:var(--br)}
+.slot:hover{border-color:var(--acc);transform:scale(1.06)}
+.slot.aslot{border-color:var(--acc);border-style:solid;
+  box-shadow:0 0 0 3px rgba(108,122,224,.22)}
+.slot img{width:100%;height:100%;object-fit:cover;border-radius:9px}
+.slot-ico{font-size:21px;color:var(--t3)}
+.slot .rmbtn{position:absolute;top:2px;right:2px;width:16px;height:16px;
+  border-radius:50%;background:rgba(239,68,68,.85);color:#fff;font-size:10px;
+  display:none;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+.slot:hover .rmbtn{display:flex}
+.nbtn{padding:7px 11px;border-radius:8px;border:1px solid var(--br2);
+  background:var(--card2);color:var(--t2);font-size:12px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;
+  transition:all .18s var(--ease)}
+.nbtn:hover{border-color:var(--acc);color:var(--acc)}
+.srow{display:flex;align-items:center;gap:8px;background:var(--card);
+  border:1px solid var(--br);border-radius:13px;padding:10px 13px;margin-bottom:10px;
+  transition:border-color .18s,background .3s var(--ease)}
+.srow:focus-within{border-color:var(--acc)}
+.srow input{flex:1;background:none;border:none;outline:none;color:var(--t1);
+  font-size:14px;font-family:'Nunito',sans-serif}
+.srow input::placeholder{color:var(--t3)}
+.srow svg{color:var(--t3);flex-shrink:0}
+.rtabs{display:flex;gap:7px;margin-bottom:11px}
+.rtab{width:42px;height:37px;border-radius:10px;border:1px solid var(--br);
+  background:var(--card2);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;transition:all .18s var(--ease)}
+.rtab:hover{border-color:var(--acc);transform:scale(1.06)}
+.rtab:active{transform:scale(.93)}
+.rtab.active{background:var(--acc);border-color:var(--acc)}
+.hgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.hitem{border-radius:9px;overflow:hidden;cursor:pointer;border:2px solid transparent;
+  transition:all .16s var(--ease);position:relative}
+.hitem:hover{border-color:var(--acc);transform:scale(1.07);
+  box-shadow:0 3px 10px rgba(108,122,224,.3)}
+.hitem:active{transform:scale(.94)}
+.hitem.in-e{border-color:var(--red);opacity:.5}
+.hitem.in-t{border-color:var(--green);opacity:.5}
+.hitem img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--card2)}
+.ai-btn{width:100%;padding:13px;border-radius:13px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;
+  font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;border:none;
+  cursor:pointer;margin-top:11px;display:flex;align-items:center;justify-content:center;
+  gap:8px;transition:all .18s var(--ease);position:relative;overflow:hidden}
+.ai-btn:hover{filter:brightness(1.12);transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(79,70,229,.4)}
+.ai-btn:active{transform:scale(.98)}
+.ai-btn::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);pointer-events:none}
+.ai-res{background:var(--card);border:1px solid rgba(108,122,224,.35);
+  border-radius:15px;padding:14px;margin-top:11px;display:none;
+  transition:background .3s var(--ease)}
+.ai-res.active{display:block;animation:pgIn .3s var(--ease)}
+.ai-res-hdr{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.ai-res-txt{font-size:13px;line-height:1.75;color:var(--t2)}
+.ai-recs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ai-rec{display:flex;align-items:center;gap:8px;background:var(--card2);
+  border-radius:10px;padding:7px 10px;font-size:13px;border:1px solid var(--br);
+  transition:background .3s var(--ease)}
+.ai-rec img{width:32px;height:32px;border-radius:6px;object-fit:cover;background:var(--card)}
+.ai-rec-n{font-size:12px;font-weight:700}
+.ai-rec-wr{font-size:11px;color:var(--green)}
+.ldots{display:inline-flex;gap:4px;align-items:center}
+.ldots span{width:5px;height:5px;border-radius:50%;background:currentColor;
+  animation:bounce 1.2s ease infinite}
+.ldots span:nth-child(2){animation-delay:.2s}
+.ldots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ── HEROES PAGE ── */
+.pttl{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;
+  margin-bottom:13px;letter-spacing:.5px}
+.hrow{display:flex;align-items:center;padding:8px 6px;
+  border-bottom:1px solid var(--br);cursor:pointer;
+  border-radius:8px;transition:all .15s var(--ease)}
+.hrow:hover{background:rgba(108,122,224,.07);padding-left:10px}
+.hrow:last-child{border-bottom:none}
+.hrow-img{width:44px;height:44px;border-radius:8px;object-fit:cover;
+  background:var(--card2);flex-shrink:0}
+.hrow-name{flex:1;padding:0 11px;font-size:15px;font-weight:500}
+.hrow-wr{font-size:15px;font-weight:700;color:var(--green)}
+.hrow-wr.avg{color:var(--amber)}
+.rlbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--t3);margin:13px 0 7px}
+.hd-back{display:flex;align-items:center;gap:6px;color:var(--acc);font-size:14px;
+  cursor:pointer;margin-bottom:15px;font-weight:700;transition:gap .18s}
+.hd-back:hover{gap:10px}
+.hd-banner{border-radius:15px;overflow:hidden;margin-bottom:15px;border:1px solid var(--br);position:relative}
+.hd-banner img{width:100%;height:160px;object-fit:cover;display:block;background:var(--card2)}
+.hd-ov{position:absolute;bottom:0;left:0;right:0;padding:38px 13px 13px;
+  background:linear-gradient(transparent,rgba(15,17,23,.95))}
+.hd-name{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700}
+.hd-roles{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.hrb{font-size:10px;padding:2px 8px;border-radius:20px;
+  border:1px solid var(--br2);color:var(--t2)}
+.sg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:13px}
+.sc{background:var(--card);border-radius:11px;border:1px solid var(--br);
+  padding:10px 11px;transition:background .3s var(--ease)}
+.sc-l{font-size:10px;color:var(--t3);letter-spacing:.5px;margin-bottom:2px}
+.sc-v{font-size:18px;font-weight:700}
+.sc-v.g{color:var(--green)}
+
+/* ── PROFILE ── */
+.pav{width:80px;height:80px;border-radius:50%;border:2px solid var(--acc);
+  background:var(--card2);margin:0 auto 13px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;color:var(--acc)}
+.pname{text-align:center;font-size:22px;font-weight:700;margin-bottom:4px}
+.psub{text-align:center;font-size:13px;color:var(--t3);margin-bottom:18px}
+.pbadge{display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:4px 12px;border-radius:20px;background:rgba(108,122,224,.15);
+  border:1px solid var(--br2);font-size:13px;color:var(--acc);
+  width:fit-content;margin:0 auto 18px;font-weight:700}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}
+.pstat{background:var(--card);border-radius:13px;border:1px solid var(--br);
+  padding:11px;text-align:center;transition:background .3s var(--ease)}
+.pstat-v{font-size:22px;font-weight:700;color:var(--acc)}
+.pstat-l{font-size:11px;color:var(--t3);margin-top:2px}
+.prow{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 13px;background:var(--card);border-radius:13px;
+  margin-bottom:7px;border:1px solid var(--br);cursor:pointer;
+  transition:all .18s var(--ease)}
+.prow:hover{border-color:var(--br2);transform:translateX(3px)}
+.prow-l{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500}
+.prow-r{color:var(--t3);font-size:14px}
+
+/* ── HERO PORTRAIT helper ── */
+.hero-portrait{width:100%;aspect-ratio:1;object-fit:cover;display:block;
+  background:var(--card2);border-radius:0}
+
+::-webkit-scrollbar{width:0;height:0}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">Gray<span>_Mops</span></div>
+  <div class="hdr-btns">
+    <div class="hbtn" id="langbtn" onclick="toggleLang()"><span id="langico">EN</span></div>
+    <div class="hbtn" id="themebtn" onclick="toggleTheme()"><span id="themeico">🌙</span></div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="lbl" id="lbl-meta">Мета патча 7.41b</div>
+  <div class="meta-card">
+    <div class="meta-hdr">
+      <div class="meta-ttl" id="meta-ttl">Мета патча 7.41b</div>
+      <div class="meta-nav">
+        <div class="mnb" onclick="metaNav(-1)">&#8249;</div>
+        <div class="mnb" onclick="metaNav(1)">&#8250;</div>
+      </div>
+    </div>
+    <div id="meta-role" class="meta-role"></div>
+    <div class="hero-grid" id="meta-grid"></div>
+    <div class="meta-dots" id="meta-dots"></div>
+  </div>
+  <div class="qgrid">
+    <div class="qcard" onclick="switchTab('drafter')">
+      <div class="ql" data-i="last_draft">Последний Драфт</div>
+      <div class="qd" data-i="make_draft">Сделай свой первый драфт</div>
+      <div class="qlink" data-i="go_drafter">Перейти к драфтеру →</div>
+    </div>
+    <div class="qcard" onclick="switchTab('heroes')">
+      <div class="ql" data-i="last_hero">Последний герой</div>
+      <div class="qd" data-i="open_hero">Открой любого героя</div>
+      <div class="qlink" data-i="go_heroes">Перейти к героям →</div>
+    </div>
+  </div>
+  <div class="lbl" data-i="latest_update">Последнее обновление</div>
+  <div class="card">
+    <div class="pi"><div class="pdot"></div><div class="pname">7.41b Gameplay Patch</div><div class="pdate" data-i="d27">27 дн. →</div></div>
+    <div class="pi" style="opacity:.5"><div class="pdot" style="background:var(--t3)"></div><div class="pname">7.41 Major Patch</div><div class="pdate" data-i="m2">2 мес. →</div></div>
+  </div>
+  <div class="brow">
+    <button class="bo" data-i="feedback">💬 Отзыв</button>
+    <button class="bo red" data-i="support">❤️ Поддержать</button>
+  </div>
+</div>
+
+<!-- QUIZZES -->
+<div class="page" id="page-quizzes">
+  <div id="qz-list">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+      <span style="font-size:22px">🎯</span>
+      <div class="pttl" style="font-size:28px;margin-bottom:0" data-i="quizzes">Квизы</div>
+    </div>
+    <div style="font-size:14px;color:var(--t2);margin-bottom:18px" data-i="quiz_sub">Узнай больше о своём игровом стиле</div>
+    <div class="qz-card">
+      <div class="qz-ttl" data-i="q1t">🎮 Какая твоя позиция?</div>
+      <div class="qz-desc" data-i="q1d">Пройди тест за 2 минуты</div>
+      <button class="btn" onclick="startQuiz('role')" data-i="start">Начать тест →</button>
+    </div>
+    <div class="qz-card">
+      <div class="qz-ttl" data-i="q2t">🔍 Подбор идеального героя</div>
+      <div class="qz-desc" data-i="q2d">Ответь на вопросы и получи список героев</div>
+      <button class="btn purple" onclick="startQuiz('hero')" data-i="findhero">Подобрать героя →</button>
+    </div>
+    <div class="qz-card">
+      <div class="qz-ttl" data-i="sgt">🎮 Угадай скилл!</div>
+      <div class="qz-desc" data-i="sgd">Посмотри на 4 картинки скиллов и угадай, от какого героя один из них</div>
+      <button class="btn green" onclick="startSkillGame()" data-i="sgstart">Играть →</button>
+    </div>
+  </div>
+  <!-- Role/Hero quiz flow -->
+  <div class="qz-flow" id="qz-flow">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:15px;cursor:pointer" onclick="endQuiz()">
+      <span style="color:var(--acc);font-size:18px">←</span>
+      <span style="color:var(--acc);font-size:14px" data-i="back">Назад</span>
+    </div>
+    <div class="qz-prog"><div class="qz-bar" id="qz-bar"></div></div>
+    <div class="qz-q" id="qz-q"></div>
+    <div class="qz-sub" id="qz-sub"></div>
+    <div id="qz-opts"></div>
+    <button class="btn" id="qz-next" style="margin-top:15px;display:none" onclick="nextQ()" data-i="next">Далее →</button>
+  </div>
+  <!-- Skill game -->
+  <div id="sg-wrap" style="display:none"></div>
+</div>
+
+<!-- DRAFTER -->
+<div class="page" id="page-drafter">
+  <div class="dft-hdr">
+    <div class="dft-ttl" data-i="drafter">ДРАФТЕР</div>
+    <div style="display:flex;gap:8px">
+      <div class="hbtn" style="border-radius:9px">🕐</div>
+      <div class="hbtn" style="border-radius:9px">🏆</div>
+    </div>
+  </div>
+  <div class="dft-sec">
+    <div class="dft-sh">
+      <div class="dft-lbl"><div class="dot dot-r"></div><span data-i="enemies">ВРАГИ</span></div>
+      <button class="nbtn" onclick="clearTeam('enemy')">↺ <span data-i="newdraft">Новые</span></button>
+    </div>
+    <div class="slots" id="enemy-slots"></div>
+  </div>
+  <div class="dft-sec">
+    <div class="dft-sh">
+      <div class="dft-lbl"><div class="dot dot-b"></div><span data-i="myteam">МОЯ КОМАНДА</span></div>
+    </div>
+    <div class="slots" id="my-slots"></div>
+  </div>
+  <div class="srow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="dft-search" oninput="buildHGrid()" data-i-ph="searchhero">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+  </div>
+  <div class="rtabs" id="rtabs">
+    <div class="rtab active" data-role="all" onclick="setRole('all')">⚔️</div>
+    <div class="rtab" data-role="carry" onclick="setRole('carry')">🏹</div>
+    <div class="rtab" data-role="mid" onclick="setRole('mid')">⚡</div>
+    <div class="rtab" data-role="offlane" onclick="setRole('offlane')">🛡️</div>
+    <div class="rtab" data-role="pos4" onclick="setRole('pos4')">🔥</div>
+    <div class="rtab" data-role="pos5" onclick="setRole('pos5')">💫</div>
+  </div>
+  <div class="hgrid" id="hgrid"></div>
+  <button class="ai-btn" onclick="getAI()">
+    <span>✨</span><span id="ai-btntxt" data-i="aianalyze">ИИ Анализ драфта</span>
+  </button>
+  <div class="ai-res" id="ai-res">
+    <div class="ai-res-hdr"><span>✨</span><span data-i="airec">ИИ Рекомендации</span></div>
+    <div class="ai-res-txt" id="ai-restxt"></div>
+    <div class="ai-recs" id="ai-recs"></div>
+  </div>
+</div>
+
+<!-- HEROES -->
+<div class="page" id="page-heroes">
+  <div id="heroes-list">
+    <div class="pttl" data-i="heroestitle">Герои</div>
+    <div class="srow" style="margin-bottom:15px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="hero-search" oninput="filterHeroes()" data-i-ph="search128">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    </div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px">
+      <div style="font-size:20px;font-weight:700" data-i="strongnow">Сильные сейчас</div>
+      <div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">Patch 7.41b</div>
+    </div>
+    <div id="heroes-by-role"></div>
+  </div>
+  <div id="hero-detail" style="display:none">
+    <div class="hd-back" onclick="closeDetail()"><span>←</span><span data-i="allheroes">Все герои</span></div>
+    <div class="hd-banner">
+      <img id="d-img" src="" alt="" style="width:100%;height:160px;object-fit:cover;display:block;background:var(--card2)">
+      <div class="hd-ov">
+        <div class="hd-name" id="d-name"></div>
+        <div class="hd-roles" id="d-roles"></div>
+      </div>
+    </div>
+    <div class="sg3">
+      <div class="sc"><div class="sc-l" data-i="winrate">Винрейт</div><div class="sc-v g" id="d-wr"></div></div>
+      <div class="sc"><div class="sc-l" data-i="pickrate">Пикрейт</div><div class="sc-v" id="d-pr"></div></div>
+      <div class="sc"><div class="sc-l">KDA</div><div class="sc-v" id="d-kda"></div></div>
+    </div>
+    <div class="card">
+      <div class="lbl" data-i="desc">Описание</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--t2)" id="d-desc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="page" id="page-profile">
+  <div class="pav">GM</div>
+  <div class="pname">Dota Player</div>
+  <div class="psub" data-i="profsub">Начни играть, чтобы заполнить профиль</div>
+  <div class="pbadge">⭐ <span data-i="legend">Легенда</span></div>
+  <div class="pstats">
+    <div class="pstat"><div class="pstat-v">0</div><div class="pstat-l" data-i="drafts">Драфтов</div></div>
+    <div class="pstat"><div class="pstat-v">0</div><div class="pstat-l" data-i="quizzesdone">Квизов</div></div>
+    <div class="pstat"><div class="pstat-v">—</div><div class="pstat-l" data-i="position">Позиция</div></div>
+  </div>
+  <div class="lbl" data-i="settings">Настройки</div>
+  <div class="prow"><div class="prow-l"><span>🌍</span><span data-i="language">Язык</span></div><div class="prow-r" id="lang-disp">Русский ›</div></div>
+  <div class="prow"><div class="prow-l"><span>🔔</span><span data-i="notifications">Уведомления</span></div><div class="prow-r" data-i="notifon">Вкл ›</div></div>
+  <div class="prow" onclick="toggleTheme()"><div class="prow-l"><span>🎨</span><span data-i="theme">Тема</span></div><div class="prow-r" id="theme-disp" data-i="dark">Тёмная ›</div></div>
+  <div class="lbl" data-i="account">Аккаунт</div>
+  <div class="prow"><div class="prow-l"><span>🔗</span><span data-i="linksteam">Привязать Steam</span></div><div class="prow-r">›</div></div>
+  <div class="prow"><div class="prow-l"><span>❓</span><span data-i="supportrow">Поддержка</span></div><div class="prow-r">›</div></div>
+  <div class="prow"><div class="prow-l"><span>📋</span><span data-i="about">О приложении</span></div><div class="prow-r">v1.0.0 ›</div></div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="ni active" id="nav-home" onclick="switchTab('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span data-i="nhome">Главная</span>
+  </div>
+  <div class="ni" id="nav-quizzes" onclick="switchTab('quizzes')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+    <span data-i="nquizzes">Квизы</span>
+  </div>
+  <div class="ni" id="nav-drafter" onclick="switchTab('drafter')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="m3 8 3-4 3 4"/><path d="m15 8 3-4 3 4"/><path d="M3 8v8a6 6 0 0 0 12 0V8"/><path d="M15 8v8a6 6 0 0 0 6-6V8"/></svg>
+    <span data-i="ndrafter">Драфтер</span>
+  </div>
+  <div class="ni" id="nav-heroes" onclick="switchTab('heroes')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <span data-i="nheroes">Герои</span>
+  </div>
+  <div class="ni" id="nav-profile" onclick="switchTab('profile')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span data-i="nprofile">Профиль</span>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// HERO DATA — using dota2.fandom.com/wiki images
+// via wikimedia which allows hotlinking
+// ═══════════════════════════════════════════════
+// We use OpenDota API-style URLs via raw static images
+// Portrait source: https://www.opendota.com/assets/images/dota2/heroes/{name}_full.png
+// Backup: generate colored SVG avatars when images fail
+
+const W = 'https://www.opendota.com/assets/images/dota2/heroes/';
+// Skill icons from the same source
+const SK = 'https://www.opendota.com/assets/images/dota2/abilities/';
+
+const HEROES = [
+  {id:1, name:'Faceless Void',   key:'faceless_void',   role:'carry',   wr:55,pr:8.2, kda:3.1, roles:['Carry','Escape'],     color:'#1a3a6b',
+   desc_ru:'Разрушитель времени из внеизмерения Клас-Ула. Манипулирует временем с помощью Хронопузыря.',
+   desc_en:'A time-bending warrior who traps enemies in his Chronosphere.'},
+  {id:2, name:'Spectre',         key:'spectre',         role:'carry',   wr:55,pr:9.1, kda:2.8, roles:['Carry','Durable'],    color:'#2d1b4e',
+   desc_ru:'Призрачная охотница, преследующая врагов по всей карте с помощью ультимейта Призрак.',
+   desc_en:'A ghostly hunter who pursues enemies across the map using Haunt.'},
+  {id:3, name:'Juggernaut',      key:'juggernaut',      role:'carry',   wr:51,pr:12.3,kda:3.4, roles:['Carry','Pusher'],     color:'#5a3a00',
+   desc_ru:'Непревзойдённый мечник с вихрем клинков и смертоносным Омнислэшем.',
+   desc_en:'An unmatched swordsman with Blade Fury and lethal Omnislash.'},
+  {id:4, name:'Anti-Mage',       key:'antimage',        role:'carry',   wr:50,pr:11.2,kda:2.9, roles:['Carry','Escape'],     color:'#1a1a4e',
+   desc_ru:'Охотник на магов, сжигающий ману врагов и телепортирующийся на короткие расстояния.',
+   desc_en:'A mana-burning hunter who blinks short distances and destroys spellcasters.'},
+  {id:5, name:'Phantom Assassin',key:'phantom_assassin',role:'carry',   wr:54,pr:10.8,kda:3.7, roles:['Carry','Escape'],     color:'#2d0a2d',
+   desc_ru:'Смертоносная убийца с уклонением и критическими ударами.',
+   desc_en:'A deadly assassin with blur evasion and devastating critical strikes.'},
+  {id:6, name:'Ember Spirit',    key:'ember_spirit',    role:'mid',     wr:57,pr:7.4, kda:4.1, roles:['Carry','Nuker'],      color:'#5a1a00',
+   desc_ru:'Огненный дух с огромной мобильностью и уроном в командных сражениях.',
+   desc_en:'A fiery spirit with incredible mobility and powerful teamfight presence.'},
+  {id:7, name:'Queen of Pain',   key:'queenofpain',     role:'mid',     wr:57,pr:9.6, kda:4.3, roles:['Nuker','Disabler'],   color:'#4e001a',
+   desc_ru:'Повелительница боли с мощным скримом и серповидными клинками.',
+   desc_en:'Queen of torture with deadly Scream and Sonic Wave.'},
+  {id:8, name:'Puck',            key:'puck',            role:'mid',     wr:53,pr:8.1, kda:3.9, roles:['Nuker','Escape'],     color:'#004a4e',
+   desc_ru:'Шаловливый дракончик с фазовым сдвигом и иллюзорным ямом.',
+   desc_en:'A faerie dragon with Phase Shift immunity and the disabling Dream Coil.'},
+  {id:9, name:'Storm Spirit',    key:'storm_spirit',    role:'mid',     wr:52,pr:8.9, kda:3.6, roles:['Carry','Nuker'],      color:'#0a2a5a',
+   desc_ru:'Повелитель электричества, мгновенно перемещающийся по карте.',
+   desc_en:'A lightning elemental who zips across the map converting mana into damage.'},
+  {id:10,name:'Visage',          key:'visage',          role:'offlane', wr:56,pr:5.2, kda:3.8, roles:['Nuker','Durable'],    color:'#3a2a00',
+   desc_ru:'Страж могил с верными фамильярами и смертоносной аурой.',
+   desc_en:'A gargoyle guardian of the dead who commands powerful familiars.'},
+  {id:11,name:'Enigma',          key:'enigma',          role:'offlane', wr:56,pr:6.8, kda:3.2, roles:['Disabler','Initiator'],color:'#0f0f2e',
+   desc_ru:'Загадочная сила с Чёрной дырой — одним из сильнейших ультимейтов в игре.',
+   desc_en:'A mysterious force with Black Hole — one of the most powerful ultimates.'},
+  {id:12,name:'Bristleback',     key:'bristleback',     role:'offlane', wr:54,pr:9.3, kda:2.7, roles:['Durable','Nuker'],    color:'#3a1a00',
+   desc_ru:'Неудержимый дикобраз с пассивным снижением урона со спины.',
+   desc_en:'An unstoppable fighter who takes reduced damage from behind.'},
+  {id:13,name:'Bounty Hunter',   key:'bounty_hunter',   role:'pos4',    wr:64,pr:7.9, kda:4.5, roles:['Escape','Support'],   color:'#2a1a00',
+   desc_ru:'Ловец наград, следящий и убивающий вражеских героев за золото.',
+   desc_en:'A bounty-hunting tracker who earns gold bonuses for killing tracked enemies.'},
+  {id:14,name:'Spirit Breaker',  key:'spirit_breaker',  role:'pos4',    wr:56,pr:11.5,kda:3.1, roles:['Durable','Initiator'],color:'#1a003a',
+   desc_ru:'Неостановимый заряд через всю карту с мощным страйком.',
+   desc_en:'An unstoppable charger who Barrels through anything on the map.'},
+  {id:15,name:'Lion',            key:'lion',            role:'pos5',    wr:53,pr:13.2,kda:3.4, roles:['Support','Disabler'], color:'#3a0a00',
+   desc_ru:'Маг тёмных искусств с двойным станом и ультимейтом Палец смерти.',
+   desc_en:'A dark magic wielder with double disable and Finger of Death.'},
+  {id:16,name:'Crystal Maiden',  key:'crystal_maiden',  role:'pos5',    wr:51,pr:12.8,kda:2.9, roles:['Support','Disabler'], color:'#00204e',
+   desc_ru:'Ледяная ведьма с аурой восстановления маны и Ледяным шторм.',
+   desc_en:'An icy sorceress who provides global mana regen and freezes battlefields.'},
+  {id:17,name:'Dazzle',          key:'dazzle',          role:'pos5',    wr:52,pr:8.6, kda:3.0, roles:['Support','Healer'],   color:'#2a003a',
+   desc_ru:'Целитель теней с оберегом от смерти и ядом, повышающим урон.',
+   desc_en:'A shadow healer who saves allies with Shallow Grave.'},
+  {id:18,name:'Witch Doctor',    key:'witch_doctor',    role:'pos5',    wr:53,pr:10.1,kda:3.3, roles:['Support','Nuker'],    color:'#1a2a00',
+   desc_ru:'Колдун вуду со станом и смертоносным танцем смерти.',
+   desc_en:'A voodoo witch doctor who paralyzes foes and channels Death Ward.'},
+  {id:19,name:'Windranger',      key:'windranger',      role:'mid',     wr:50,pr:11.7,kda:3.5, roles:['Carry','Nuker'],      color:'#1a3a00',
+   desc_ru:'Стремительная лучница, обездвиживающая врагов Шэклшотом.',
+   desc_en:'A swift archer who windwalks to safety and pins enemies with Shackleshot.'},
+  {id:20,name:'Dragon Knight',   key:'dragon_knight',   role:'offlane', wr:52,pr:9.8, kda:2.8, roles:['Durable','Pusher'],  color:'#003a1a',
+   desc_ru:'Рыцарь-дракон с мощной атакой в форме дракона.',
+   desc_en:'A noble knight who transforms into a dragon to siege towers.'},
+];
+
+// Skills data for the guessing game
+// Using Dota 2 Wiki skill images (via the OpenDota CDN)
+const SKILLS = [
+  {hero:'Faceless Void',   name:'Chronosphere', name_ru:'Хронопузырь',     img: SK+'faceless_void_chronosphere.png',     color:'#1a3a6b'},
+  {hero:'Faceless Void',   name:'Time Walk',    name_ru:'Перемотка',        img: SK+'faceless_void_time_walk.png',         color:'#1a3a6b'},
+  {hero:'Faceless Void',   name:'Time Lock',    name_ru:'Блокировка',       img: SK+'faceless_void_time_lock.png',         color:'#1a3a6b'},
+  {hero:'Spectre',         name:'Haunt',        name_ru:'Призрак',          img: SK+'spectre_haunt.png',                   color:'#2d1b4e'},
+  {hero:'Spectre',         name:'Desolate',     name_ru:'Запустение',       img: SK+'spectre_desolate.png',                color:'#2d1b4e'},
+  {hero:'Juggernaut',      name:'Omnislash',    name_ru:'Омнислэш',         img: SK+'juggernaut_omni_slash.png',           color:'#5a3a00'},
+  {hero:'Juggernaut',      name:'Blade Fury',   name_ru:'Вихрь клинков',    img: SK+'juggernaut_blade_fury.png',           color:'#5a3a00'},
+  {hero:'Anti-Mage',       name:'Blink',        name_ru:'Телепорт',         img: SK+'antimage_blink.png',                  color:'#1a1a4e'},
+  {hero:'Anti-Mage',       name:'Mana Break',   name_ru:'Манобрейк',        img: SK+'antimage_mana_break.png',             color:'#1a1a4e'},
+  {hero:'Anti-Mage',       name:'Mana Void',    name_ru:'Манопустота',      img: SK+'antimage_mana_void.png',              color:'#1a1a4e'},
+  {hero:'Phantom Assassin',name:'Coup de Grâce',name_ru:'Удар милосердия',  img: SK+'phantom_assassin_coup_de_grace.png',  color:'#2d0a2d'},
+  {hero:'Phantom Assassin',name:'Blink Strike', name_ru:'Блинк-удар',       img: SK+'phantom_assassin_phantom_strike.png', color:'#2d0a2d'},
+  {hero:'Ember Spirit',    name:'Sleight of Fist',name_ru:'Ловкость рук',   img: SK+'ember_spirit_sleight_of_fist.png',    color:'#5a1a00'},
+  {hero:'Ember Spirit',    name:'Fire Remnant', name_ru:'Огненный отпечаток',img: SK+'ember_spirit_fire_remnant.png',      color:'#5a1a00'},
+  {hero:'Queen of Pain',   name:'Scream of Pain',name_ru:'Крик боли',       img: SK+'queenofpain_scream_of_pain.png',      color:'#4e001a'},
+  {hero:'Queen of Pain',   name:'Sonic Wave',   name_ru:'Звуковая волна',   img: SK+'queenofpain_sonic_wave.png',          color:'#4e001a'},
+  {hero:'Puck',            name:'Dream Coil',   name_ru:'Иллюзорный яма',   img: SK+'puck_dream_coil.png',                 color:'#004a4e'},
+  {hero:'Puck',            name:'Phase Shift',  name_ru:'Фазовый сдвиг',    img: SK+'puck_phase_shift.png',                color:'#004a4e'},
+  {hero:'Storm Spirit',    name:'Ball Lightning',name_ru:'Шаровая молния',  img: SK+'storm_spirit_ball_lightning.png',     color:'#0a2a5a'},
+  {hero:'Storm Spirit',    name:'Electric Vortex',name_ru:'Электровихрь',   img: SK+'storm_spirit_electric_vortex.png',    color:'#0a2a5a'},
+  {hero:'Enigma',          name:'Black Hole',   name_ru:'Чёрная дыра',      img: SK+'enigma_black_hole.png',               color:'#0f0f2e'},
+  {hero:'Enigma',          name:'Midnight Pulse',name_ru:'Полночный пульс', img: SK+'enigma_midnight_pulse.png',           color:'#0f0f2e'},
+  {hero:'Bounty Hunter',   name:'Track',        name_ru:'Слежка',           img: SK+'bounty_hunter_track.png',             color:'#2a1a00'},
+  {hero:'Lion',            name:'Finger of Death',name_ru:'Палец смерти',   img: SK+'lion_finger_of_death.png',            color:'#3a0a00'},
+  {hero:'Lion',            name:'Hex',          name_ru:'Превращение',      img: SK+'lion_voodoo.png',                     color:'#3a0a00'},
+  {hero:'Crystal Maiden',  name:'Freezing Field',name_ru:'Ледяное поле',    img: SK+'crystal_maiden_crystal_nova.png',     color:'#00204e'},
+  {hero:'Dragon Knight',   name:'Elder Dragon Form',name_ru:'Форма дракона',img: SK+'dragon_knight_elder_dragon_form.png', color:'#003a1a'},
+  {hero:'Windranger',      name:'Shackleshot',  name_ru:'Шэклшот',          img: SK+'windrunner_shackleshot.png',          color:'#1a3a00'},
+  {hero:'Windranger',      name:'Powershot',    name_ru:'Мощный выстрел',   img: SK+'windrunner_powershot.png',            color:'#1a3a00'},
+  {hero:'Dazzle',          name:'Shallow Grave',name_ru:'Мелкая могила',    img: SK+'dazzle_shallow_grave.png',            color:'#2a003a'},
+];
+
+// Generate avatar SVG for when images fail
+function heroAvatar(hero) {
+  const c = hero.color || '#252840';
+  const initials = hero.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><rect width='80' height='80' rx='8' fill='${c}'/><text x='40' y='48' font-size='24' font-weight='bold' text-anchor='middle' fill='rgba(255,255,255,0.9)' font-family='Arial'>${initials}</text></svg>`)}`;
+}
+
+function skillAvatar(skill) {
+  const c = skill.color || '#252840';
+  const letter = skill.name[0];
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'><rect width='72' height='72' rx='12' fill='${c}'/><text x='36' y='46' font-size='28' font-weight='bold' text-anchor='middle' fill='rgba(255,255,255,0.9)' font-family='Arial'>${letter}</text></svg>`)}`;
+}
+
+function imgWithFallback(src, fallbackFn, alt, cls='') {
+  return `<img src="${src}" alt="${alt}" class="${cls}" onerror="this.src='${fallbackFn}';this.onerror=null">`;
+}
+
+// ─── I18N ───
+const T = {
+  ru:{
+    last_draft:'Последний Драфт',make_draft:'Сделай свой первый драфт',go_drafter:'Перейти к драфтеру →',
+    last_hero:'Последний герой',open_hero:'Открой любого героя',go_heroes:'Перейти к героям →',
+    latest_update:'Последнее обновление',d27:'27 дн. →',m2:'2 мес. →',
+    feedback:'💬 Отзыв',support:'❤️ Поддержать',quizzes:'Квизы',
+    quiz_sub:'Узнай больше о своём игровом стиле',
+    q1t:'🎮 Какая твоя позиция?',q1d:'Пройди тест за 2 минуты',start:'Начать тест →',
+    q2t:'🔍 Подбор идеального героя',q2d:'Ответь на вопросы и получи список героев',
+    findhero:'Подобрать героя →',
+    sgt:'🎮 Угадай скилл!',sgd:'Посмотри на скиллы и угадай, от какого героя',sgstart:'Играть →',
+    back:'Назад',next:'Далее →',drafter:'ДРАФТЕР',enemies:'ВРАГИ',newdraft:'Новые',myteam:'МОЯ КОМАНДА',
+    searchhero:'Найти любого героя...',aianalyze:'ИИ Анализ драфта',airec:'ИИ Рекомендации',
+    heroestitle:'Герои',search128:'Найти среди героев',strongnow:'Сильные сейчас',
+    allheroes:'Все герои',winrate:'Винрейт',pickrate:'Пикрейт',desc:'Описание',
+    profsub:'Начни играть, чтобы заполнить профиль',legend:'Легенда',
+    drafts:'Драфтов',quizzesdone:'Квизов',position:'Позиция',
+    settings:'Настройки',language:'Язык',notifications:'Уведомления',notifon:'Вкл ›',
+    theme:'Тема',dark:'Тёмная ›',light:'Светлая ›',account:'Аккаунт',
+    linksteam:'Привязать Steam',supportrow:'Поддержка',about:'О приложении',
+    nhome:'Главная',nquizzes:'Квизы',ndrafter:'Драфтер',nheroes:'Герои',nprofile:'Профиль',
+    lang_d:'Русский ›',noadd:'Добавь хотя бы одного героя!',aierr:'Ошибка соединения.',
+    meta_carry:'⚔️ Керри',meta_mid:'⚡ Мид',meta_offlane:'🛡️ Оффлейн',meta_pos4:'🎯 Четвёрка',meta_pos5:'💫 Пятёрка',
+    r_carry:'КЕРРИ',r_mid:'МИД',r_offlane:'ОФФЛЕЙН',r_pos4:'ЧЕТВЁРКА',r_pos5:'ПЯТЁРКА',
+    sg_q:'От какого героя этот скилл?',sg_q_sub:'Выбери правильный ответ',
+    sg_correct:'Правильно! +1 очко',sg_wrong:'Неверно!',
+    sg_lives:'Жизни',sg_score:'Очки',sg_streak:'Серия',
+    sg_result_great:'Отлично!',sg_result_good:'Хорошо!',sg_result_ok:'Неплохо',sg_result_bad:'Тренируйся!',
+    sg_play_again:'Играть снова',sg_back:'← Назад к квизам',
+  },
+  en:{
+    last_draft:'Last Draft',make_draft:'Make your first draft',go_drafter:'Go to Drafter →',
+    last_hero:'Last Hero',open_hero:'Open any hero in Heroes',go_heroes:'Go to Heroes →',
+    latest_update:'Latest Update',d27:'27 days ago →',m2:'2 months ago →',
+    feedback:'💬 Feedback',support:'❤️ Support',quizzes:'Quizzes',
+    quiz_sub:'Discover your playstyle',
+    q1t:'🎮 What is your position?',q1d:'Take a 2-minute test',start:'Start test →',
+    q2t:'🔍 Find your perfect hero',q2d:'Answer questions and get a hero list',
+    findhero:'Find hero →',
+    sgt:'🎮 Guess the Skill!',sgd:'Look at skill icons and guess which hero they belong to',sgstart:'Play →',
+    back:'Back',next:'Next →',drafter:'DRAFTER',enemies:'ENEMIES',newdraft:'New',myteam:'MY TEAM',
+    searchhero:'Find any hero...',aianalyze:'AI Draft Analysis',airec:'AI Recommendations',
+    heroestitle:'Heroes',search128:'Search heroes',strongnow:'Strong right now',
+    allheroes:'All Heroes',winrate:'Win Rate',pickrate:'Pick Rate',desc:'Description',
+    profsub:'Start playing to fill your profile',legend:'Legend',
+    drafts:'Drafts',quizzesdone:'Quizzes',position:'Position',
+    settings:'Settings',language:'Language',notifications:'Notifications',notifon:'On ›',
+    theme:'Theme',dark:'Dark ›',light:'Light ›',account:'Account',
+    linksteam:'Link Steam',supportrow:'Support',about:'About',
+    nhome:'Home',nquizzes:'Quizzes',ndrafter:'Drafter',nheroes:'Heroes',nprofile:'Profile',
+    lang_d:'English ›',noadd:'Add at least one hero!',aierr:'Connection error.',
+    meta_carry:'⚔️ Carry',meta_mid:'⚡ Mid',meta_offlane:'🛡️ Offlane',meta_pos4:'🎯 Pos 4',meta_pos5:'💫 Pos 5',
+    r_carry:'CARRY',r_mid:'MID',r_offlane:'OFFLANE',r_pos4:'POS 4',r_pos5:'POS 5',
+    sg_q:'Which hero has this skill?',sg_q_sub:'Choose the correct answer',
+    sg_correct:'Correct! +1 point',sg_wrong:'Wrong!',
+    sg_lives:'Lives',sg_score:'Score',sg_streak:'Streak',
+    sg_result_great:'Excellent!',sg_result_good:'Good job!',sg_result_ok:'Not bad',sg_result_bad:'Keep training!',
+    sg_play_again:'Play again',sg_back:'← Back to Quizzes',
+  }
+};
+
+let lang = 'ru';
+let dark = true;
+
+function t(k){ return (T[lang]&&T[lang][k]) || T.ru[k] || k; }
+
+function applyLang(){
+  document.querySelectorAll('[data-i]').forEach(el => el.textContent = t(el.dataset.i));
+  document.querySelectorAll('[data-i-ph]').forEach(el => el.placeholder = t(el.dataset.iPh));
+  document.getElementById('lang-disp').textContent = t('lang_d');
+  document.getElementById('theme-disp').textContent = dark ? t('dark') : t('light');
+  buildMeta(); buildHeroList();
+}
+
+function toggleLang(){
+  lang = lang==='ru'?'en':'ru';
+  document.getElementById('langico').textContent = lang==='ru'?'EN':'RU';
+  applyLang();
+}
+
+function toggleTheme(){
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark?'dark':'light');
+  document.getElementById('themeico').textContent = dark?'🌙':'☀️';
+  document.getElementById('theme-disp').textContent = dark ? t('dark') : t('light');
+}
+
+// ─── NAV ───
+function switchTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  document.getElementById('nav-'+tab).classList.add('active');
+}
+
+// ─── META ───
+const META_ROLES = ['carry','mid','offlane','pos4','pos5'];
+const META_KEYS  = ['meta_carry','meta_mid','meta_offlane','meta_pos4','meta_pos5'];
+let metaSlide = 0;
+
+function buildMeta(){
+  const dots = document.getElementById('meta-dots');
+  dots.innerHTML = '';
+  META_ROLES.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'mdot'+(i===metaSlide?' active':'');
+    dots.appendChild(d);
+  });
+  const lbl = t(META_KEYS[metaSlide]);
+  document.getElementById('meta-role').innerHTML =
+    `<span style="font-size:15px">${lbl.split(' ')[0]}</span><span>${lbl.split(' ').slice(1).join(' ')}</span>`;
+  const roleHeroes = HEROES.filter(h=>h.role===META_ROLES[metaSlide]).sort((a,b)=>b.wr-a.wr).slice(0,5);
+  const grid = document.getElementById('meta-grid');
+  grid.innerHTML = '';
+  roleHeroes.forEach(h=>{
+    grid.innerHTML += `<div class="htmb" onclick="openDetail(${h.id})">
+      ${imgWithFallback(W+h.key+'_full.png', heroAvatar(h), h.name, 'htmb-img')}
+      <div class="htmb-wr">${h.wr}%</div>
+    </div>`;
+  });
+  const metaTtl = document.getElementById('meta-ttl');
+  if(metaTtl) metaTtl.textContent = lang==='en'?'Patch 7.41b Meta':'Мета патча 7.41b';
+}
+
+function metaNav(d){ metaSlide=(metaSlide+d+5)%5; buildMeta(); }
+
+// ─── HEROES PAGE ───
+function buildHeroList(){
+  const cont = document.getElementById('heroes-by-role');
+  if(!cont) return;
+  cont.innerHTML = '';
+  META_ROLES.forEach(role=>{
+    const rHeroes = HEROES.filter(h=>h.role===role).sort((a,b)=>b.wr-a.wr);
+    const rKey = {carry:'r_carry',mid:'r_mid',offlane:'r_offlane',pos4:'r_pos4',pos5:'r_pos5'}[role];
+    cont.innerHTML += `<div class="rlbl">${t(rKey)}</div>`;
+    rHeroes.forEach(h=>{
+      cont.innerHTML += `<div class="hrow" onclick="openDetail(${h.id})">
+        ${imgWithFallback(W+h.key+'_full.png', heroAvatar(h), h.name, 'hrow-img')}
+        <div class="hrow-name">${h.name}</div>
+        <div class="hrow-wr${h.wr>=55?'':' avg'}">${h.wr}%</div>
+      </div>`;
+    });
+  });
+}
+
+function filterHeroes(){
+  const q = document.getElementById('hero-search').value.toLowerCase();
+  if(!q){ buildHeroList(); return; }
+  const cont = document.getElementById('heroes-by-role');
+  cont.innerHTML = '';
+  HEROES.filter(h=>h.name.toLowerCase().includes(q)).sort((a,b)=>b.wr-a.wr).forEach(h=>{
+    cont.innerHTML += `<div class="hrow" onclick="openDetail(${h.id})">
+      ${imgWithFallback(W+h.key+'_full.png', heroAvatar(h), h.name, 'hrow-img')}
+      <div class="hrow-name">${h.name}</div>
+      <div class="hrow-wr">${h.wr}%</div>
+    </div>`;
+  });
+}
+
+function openDetail(id){
+  const h = HEROES.find(x=>x.id===id);
+  if(!h) return;
+  const imgEl = document.getElementById('d-img');
+  imgEl.src = W+h.key+'_full.png';
+  imgEl.onerror = ()=>{ imgEl.src=heroAvatar(h); imgEl.onerror=null; };
+  document.getElementById('d-name').textContent = h.name;
+  document.getElementById('d-wr').textContent = h.wr+'%';
+  document.getElementById('d-pr').textContent = h.pr+'%';
+  document.getElementById('d-kda').textContent = h.kda;
+  document.getElementById('d-desc').textContent = lang==='en'?h.desc_en:h.desc_ru;
+  document.getElementById('d-roles').innerHTML = h.roles.map(r=>`<span class="hrb">${r}</span>`).join('');
+  document.getElementById('heroes-list').style.display='none';
+  document.getElementById('hero-detail').style.display='block';
+  switchTab('heroes');
+}
+
+function closeDetail(){
+  document.getElementById('heroes-list').style.display='block';
+  document.getElementById('hero-detail').style.display='none';
+}
+
+// ─── DRAFTER ───
+let eTeam=[null,null,null,null,null], mTeam=[null,null,null,null,null];
+let aSlot={team:'my',idx:0}, dRole='all';
+
+function buildSlots(team,id){
+  const cont=document.getElementById(id);
+  cont.innerHTML='';
+  const arr=team==='enemy'?eTeam:mTeam;
+  const icons=['⚔️','🏹','🛡️','🔥','💫'];
+  arr.forEach((h,i)=>{
+    const isA=aSlot.team===team&&aSlot.idx===i;
+    let inner = h
+      ? `${imgWithFallback(W+h.key+'_full.png',heroAvatar(h),h.name)}<div class="rmbtn" onclick="removeSlot('${team}',${i},event)">✕</div>`
+      : `<span class="slot-ico">${icons[i]}</span>`;
+    cont.innerHTML+=`<div class="slot${h?' filled':''}${isA?' aslot':''}" onclick="setSlot('${team}',${i})">${inner}</div>`;
+  });
+}
+
+function setSlot(team,idx){ aSlot={team,idx}; buildSlots('enemy','enemy-slots'); buildSlots('my','my-slots'); }
+
+function removeSlot(team,idx,e){
+  e.stopPropagation();
+  (team==='enemy'?eTeam:mTeam)[idx]=null;
+  buildSlots(team,team==='enemy'?'enemy-slots':'my-slots');
+  buildHGrid();
+}
+
+function clearTeam(team){
+  if(team==='enemy') eTeam=[null,null,null,null,null]; else mTeam=[null,null,null,null,null];
+  buildSlots(team,team==='enemy'?'enemy-slots':'my-slots');
+  buildHGrid();
+  document.getElementById('ai-res').classList.remove('active');
+}
+
+function setRole(r){
+  dRole=r;
+  document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-role="${r}"]`).classList.add('active');
+  buildHGrid();
+}
+
+function buildHGrid(){
+  const q=document.getElementById('dft-search').value.toLowerCase();
+  const grid=document.getElementById('hgrid');
+  grid.innerHTML='';
+  HEROES.filter(h=>(dRole==='all'||h.role===dRole)&&(!q||h.name.toLowerCase().includes(q))).forEach(h=>{
+    const inE=eTeam.some(e=>e&&e.id===h.id), inT=mTeam.some(t=>t&&t.id===h.id);
+    grid.innerHTML+=`<div class="hitem${inE?' in-e':inT?' in-t':''}" onclick="pickHero(${h.id})">
+      ${imgWithFallback(W+h.key+'_full.png',heroAvatar(h),h.name,'hero-portrait')}
+    </div>`;
+  });
+}
+
+function pickHero(id){
+  const h=HEROES.find(x=>x.id===id);
+  if(!h||[...eTeam,...mTeam].some(x=>x&&x.id===id)) return;
+  const arr=aSlot.team==='enemy'?eTeam:mTeam;
+  arr[aSlot.idx]=h;
+  const ne=arr.findIndex((s,i)=>i>aSlot.idx&&!s);
+  if(ne!==-1){ aSlot.idx=ne; }
+  else{
+    const ot=aSlot.team==='enemy'?'my':'enemy';
+    const oa=ot==='enemy'?eTeam:mTeam;
+    const oe=oa.findIndex(s=>!s);
+    if(oe!==-1){aSlot.team=ot;aSlot.idx=oe;}
+  }
+  buildSlots('enemy','enemy-slots'); buildSlots('my','my-slots');
+  buildHGrid();
+  document.getElementById('ai-res').classList.remove('active');
+}
+
+// ─── AI ───
+async function getAI(){
+  const ep=eTeam.filter(Boolean), mp=mTeam.filter(Boolean);
+  if(!ep.length&&!mp.length){alert(t('noadd'));return;}
+  const btn=document.getElementById('ai-btntxt');
+  btn.innerHTML='<span class="ldots"><span></span><span></span><span></span></span>';
+  document.getElementById('ai-res').classList.remove('active');
+  const avail=HEROES.filter(h=>!ep.some(e=>e.id===h.id)&&!mp.some(x=>x.id===h.id)).map(h=>h.name).slice(0,15).join(', ');
+  const isEn=lang==='en';
+  const prompt=isEn
+    ?`Dota 2 expert. Draft:\nEnemies: ${ep.map(h=>h.name).join(', ')||'none'}\nMy team: ${mp.map(h=>h.name).join(', ')||'none'}\nAvailable: ${avail}\n\nGive:\n1. Brief analysis (2-3 sentences)\n2. Top-3 recommended heroes with 1-sentence each\n3. Key strategy tip\n\nFormat: analysis, then "🎯 Recommendations:", then "💡 Strategy:"`
+    :`Эксперт Dota 2. Драфт:\nВраги: ${ep.map(h=>h.name).join(', ')||'нет'}\nМоя команда: ${mp.map(h=>h.name).join(', ')||'нет'}\nДоступны: ${avail}\n\nДай:\n1. Краткий анализ (2-3 предложения)\n2. Топ-3 героя с объяснением\n3. Совет по стратегии\n\nФормат: анализ, потом "🎯 Рекомендации:", потом "💡 Стратегия:"`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const d=await r.json();
+    const txt=d.content?.find(c=>c.type==='text')?.text||t('aierr');
+    document.getElementById('ai-restxt').textContent=txt;
+    const recs=HEROES.filter(h=>!ep.some(e=>e.id===h.id)&&!mp.some(x=>x.id===h.id)).sort((a,b)=>b.wr-a.wr).slice(0,3);
+    const rc=document.getElementById('ai-recs');
+    rc.innerHTML='';
+    recs.forEach(h=>{
+      rc.innerHTML+=`<div class="ai-rec">
+        ${imgWithFallback(W+h.key+'_full.png',heroAvatar(h),h.name)}
+        <div><div class="ai-rec-n">${h.name}</div><div class="ai-rec-wr">${h.wr}% WR</div></div>
+      </div>`;
+    });
+    document.getElementById('ai-res').classList.add('active');
+  }catch(e){
+    document.getElementById('ai-restxt').textContent=t('aierr');
+    document.getElementById('ai-res').classList.add('active');
+  }
+  btn.setAttribute('data-i','aianalyze');
+  btn.textContent=t('aianalyze');
+}
+
+// ─── CLASSIC QUIZZES ───
+const QROLE=[
+  {q_ru:'Тебе нравится выносить врагов поздно в игре?',q_en:'Do you enjoy carrying in late game?',
+   sub_ru:'Когда все предметы собраны',sub_en:'When fully farmed',
+   opts:[{i:'✅',ru:'Да, обожаю',en:'Yes, love it'},{i:'🤔',ru:'Иногда',en:'Sometimes'},{i:'❌',ru:'Нет',en:'No'}],key:'lg'},
+  {q_ru:'Ты предпочитаешь инициировать бои?',q_en:'Do you prefer initiating fights?',sub_ru:'',sub_en:'',
+   opts:[{i:'💥',ru:'Да, начинаю замесы',en:'Yes, I start fights'},{i:'🛡️',ru:'Защищаю команду',en:'Protect teammates'},{i:'🎯',ru:'Дамагю издали',en:'Damage from range'}],key:'style'},
+  {q_ru:'Важна ли тебе мобильность?',q_en:'Is mobility important to you?',sub_ru:'',sub_en:'',
+   opts:[{i:'🏃',ru:'Очень важна',en:'Very important'},{i:'⚖️',ru:'Средне',en:'Moderate'},{i:'🏰',ru:'Выживаемость важнее',en:'Survivability first'}],key:'mob'},
+];
+const QHERO=[
+  {q_ru:'Нравятся быстрые герои с рывками?',q_en:'Do you like fast heroes with dashes?',sub_ru:'',sub_en:'',
+   opts:[{i:'⚡',ru:'Да!',en:'Yes!'},{i:'🤷',ru:'Не особо',en:'Not really'},{i:'🐢',ru:'Люблю медленных',en:'Slow but strong'}],key:'speed'},
+  {q_ru:'Физический или магический урон?',q_en:'Physical or magical damage?',sub_ru:'',sub_en:'',
+   opts:[{i:'⚔️',ru:'Физический',en:'Physical'},{i:'🔮',ru:'Магический',en:'Magical'},{i:'💫',ru:'Смешанный',en:'Mixed'}],key:'dmg'},
+  {q_ru:'Как хочешь побеждать?',q_en:'How do you want to win?',sub_ru:'',sub_en:'',
+   opts:[{i:'🎯',ru:'Убиваю один всех',en:'Solo carry'},{i:'🤝',ru:'Помогаю команде',en:'Support team'},{i:'🏰',ru:'Давлю строения',en:'Push buildings'}],key:'win'},
+];
+
+let cQuiz=[], qStep=0, qAnswers={}, qType='';
+
+function startQuiz(type){
+  qType=type; cQuiz=type==='role'?QROLE:QHERO; qStep=0; qAnswers={};
+  document.getElementById('qz-list').style.display='none';
+  document.getElementById('sg-wrap').style.display='none';
+  document.getElementById('qz-flow').style.display='block';
+  showQ();
+}
+function showQ(){
+  const q=cQuiz[qStep];
+  document.getElementById('qz-q').textContent=lang==='en'?q.q_en:q.q_ru;
+  document.getElementById('qz-sub').textContent=lang==='en'?q.sub_en:q.sub_ru;
+  document.getElementById('qz-bar').style.width=((qStep+1)/cQuiz.length*100)+'%';
+  const opts=document.getElementById('qz-opts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    opts.innerHTML+=`<div class="qz-opt" onclick="selOpt(${i})"><span class="qz-ico">${o.i}</span>${lang==='en'?o.en:o.ru}</div>`;
+  });
+  document.getElementById('qz-next').style.display='none';
+}
+function selOpt(i){
+  document.querySelectorAll('.qz-opt').forEach(o=>o.classList.remove('sel'));
+  document.querySelectorAll('.qz-opt')[i].classList.add('sel');
+  qAnswers[cQuiz[qStep].key]=i;
+  document.getElementById('qz-next').style.display='flex';
+}
+function nextQ(){
+  qStep++;
+  if(qStep>=cQuiz.length) showQResult(); else showQ();
+}
+function showQResult(){
+  document.getElementById('qz-q').textContent='🎉 '+(lang==='en'?'Result!':'Результат!');
+  document.getElementById('qz-sub').textContent='';
+  document.getElementById('qz-bar').style.width='100%';
+  document.getElementById('qz-next').style.display='none';
+  let res='';
+  if(qType==='role'){
+    if(qAnswers.style===0) res=lang==='en'?'🔴 Initiator / Offlane':'🔴 Инициатор / Оффлейн';
+    else if(qAnswers.lg===0) res='⚔️ '+(lang==='en'?'Carry':'Керри');
+    else res='💫 '+(lang==='en'?'Support':'Саппорт');
+  } else {
+    if(qAnswers.speed===0&&qAnswers.dmg===1) res='🔮 Ember Spirit / Storm Spirit';
+    else if(qAnswers.dmg===0) res='⚔️ Faceless Void / Phantom Assassin';
+    else res='🎯 Queen of Pain / Puck';
+  }
+  document.getElementById('qz-opts').innerHTML=`<div class="card" style="text-align:center;padding:22px">
+    <div style="font-size:40px;margin-bottom:11px">🎯</div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:7px">${res}</div>
+    <div style="font-size:13px;color:var(--t2);line-height:1.6">${lang==='en'?'Great result! Try these heroes.':'Отличный результат! Попробуй этих героев.'}</div>
+    <button class="btn" style="margin-top:15px" onclick="endQuiz()">${lang==='en'?'Finish':'Завершить'}</button>
+  </div>`;
+}
+function endQuiz(){
+  document.getElementById('qz-list').style.display='block';
+  document.getElementById('qz-flow').style.display='none';
+  document.getElementById('sg-wrap').style.display='none';
+}
+
+// ─── SKILL GUESSING GAME ───
+let sgScore=0, sgLives=3, sgStreak=0, sgMaxStreak=0, sgRound=0, sgTotal=10;
+let sgLocked=false;
+
+function startSkillGame(){
+  sgScore=0; sgLives=3; sgStreak=0; sgMaxStreak=0; sgRound=0; sgLocked=false;
+  document.getElementById('qz-list').style.display='none';
+  document.getElementById('qz-flow').style.display='none';
+  const w=document.getElementById('sg-wrap');
+  w.style.display='block';
+  w.className='sg-wrap';
+  nextSGRound();
+}
+
+function nextSGRound(){
+  if(sgLives<=0 || sgRound>=sgTotal){ showSGResult(); return; }
+  sgLocked=false; sgRound++;
+
+  // Pick a random skill as the "correct" answer
+  const correct = SKILLS[Math.floor(Math.random()*SKILLS.length)];
+
+  // Pick 3 wrong hero answers (different from correct)
+  const otherHeroes = [...new Set(SKILLS.map(s=>s.hero))].filter(h=>h!==correct.hero);
+  const shuffled = otherHeroes.sort(()=>Math.random()-.5).slice(0,3);
+  const allAnswers = [correct.hero, ...shuffled].sort(()=>Math.random()-.5);
+
+  // Pick 3 more random skills (decoy images) + the correct one = 4 skill icons
+  const decoys = SKILLS.filter(s=>s.hero!==correct.hero).sort(()=>Math.random()-.5).slice(0,3);
+  const skillsToShow = [correct, ...decoys].sort(()=>Math.random()-.5);
+
+  const livesHtml = Array.from({length:3},(_,i)=>i<sgLives?'❤️':'🖤').join('');
+
+  const w=document.getElementById('sg-wrap');
+  w.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:15px;cursor:pointer" onclick="endQuiz()">
+      <span style="color:var(--acc);font-size:18px">←</span>
+      <span style="color:var(--acc);font-size:14px">${t('sg_back')}</span>
+    </div>
+    <div class="sg-score">
+      <div>
+        <div class="sg-score-val">${sgScore}</div>
+        <div class="sg-score-lbl">${t('sg_score')}</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:13px;color:var(--t3);margin-bottom:3px;text-transform:uppercase;letter-spacing:1px">${t('sg_streak')}</div>
+        <div style="font-size:20px;font-weight:700;color:var(--amber)">🔥${sgStreak}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="sg-lives">${livesHtml}</div>
+        <div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">${sgRound}/${sgTotal}</div>
+      </div>
+    </div>
+    <div class="qz-prog" style="margin-bottom:16px"><div class="qz-bar" style="width:${sgRound/sgTotal*100}%"></div></div>
+    <div class="sg-q">${t('sg_q')}</div>
+    <div class="sg-qsub">${t('sg_q_sub')}</div>
+    <div class="sg-skills" id="sg-skills">
+      ${skillsToShow.map((sk,i)=>`
+        <div class="sg-skill" id="sgsk-${i}" onclick="sgClick(this,${JSON.stringify(sk.hero===correct.hero)},${JSON.stringify(correct.hero)},${i})">
+          <img src="${sk.img}" alt="${sk.name}" style="width:72px;height:72px;border-radius:12px;object-fit:cover;background:var(--card2)"
+               onerror="this.src='${skillAvatar(sk)}';this.onerror=null">
+          <div class="sg-skill-name">${lang==='en'?sk.name:sk.name_ru}</div>
+          <div class="sg-skill-hero" style="opacity:0;transition:opacity .3s" id="sk-hero-${i}">${sk.hero}</div>
+        </div>`).join('')}
+    </div>
+    <div class="sg-fb" id="sg-fb"></div>
+    <div class="hgrid" id="sg-answers" style="grid-template-columns:1fr 1fr;gap:10px">
+      ${allAnswers.map(hero=>{
+        const hd=HEROES.find(h=>h.name===hero)||{key:'',name:hero,color:'#252840'};
+        return `<div class="sg-skill" style="flex-direction:row;justify-content:flex-start;padding:10px 12px" 
+                     onclick="sgAnswer(this,'${hero}','${correct.hero}')">
+          <img src="${W+hd.key+'_full.png'}" alt="${hero}" 
+               style="width:40px;height:40px;border-radius:8px;object-fit:cover;background:var(--card2);flex-shrink:0"
+               onerror="this.src='${heroAvatar(hd)}';this.onerror=null">
+          <div style="margin-left:10px;font-size:13px;font-weight:700">${hero}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="btn" id="sg-nextbtn" style="margin-top:14px;display:none" onclick="nextSGRound()">${lang==='en'?'Next →':'Далее →'}</button>
+  `;
+
+  // store correct hero for reveal
+  w.dataset.correct = correct.hero;
+  w.dataset.correctIdx = skillsToShow.findIndex(s=>s.hero===correct.hero);
+}
+
+function sgAnswer(el, chosen, correct){
+  if(sgLocked) return;
+  sgLocked=true;
+
+  const isRight = chosen===correct;
+
+  // Highlight all answer options
+  document.querySelectorAll('#sg-answers .sg-skill').forEach(btn=>{
+    const heroName = btn.querySelector('div:last-child').textContent;
+    if(heroName===correct) btn.classList.add('reveal');
+    else if(heroName===chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  // Reveal skill hero names
+  document.querySelectorAll('[id^="sk-hero-"]').forEach(el=>el.style.opacity='1');
+
+  const fb=document.getElementById('sg-fb');
+  if(isRight){
+    sgScore++; sgStreak++; sgMaxStreak=Math.max(sgMaxStreak,sgStreak);
+    fb.textContent='✅ '+t('sg_correct')+(sgStreak>1?` 🔥${sgStreak}`:'');
+    fb.className='sg-fb ok';
+  } else {
+    sgLives--;
+    sgStreak=0;
+    fb.textContent='❌ '+t('sg_wrong')+` ${correct}`;
+    fb.className='sg-fb bad';
+  }
+
+  const nb=document.getElementById('sg-nextbtn');
+  if(nb) nb.style.display='flex';
+
+  if(sgLives<=0){
+    setTimeout(showSGResult,1200);
+  }
+}
+
+function sgClick(el, isCorrect, correctHero, idx){
+  // clicking on skill icon doesn't answer — just highlight it
+  document.querySelectorAll('.sg-skill').forEach(s=>s.style.outline='none');
+  el.style.outline='2px solid var(--acc)';
+}
+
+function showSGResult(){
+  const w=document.getElementById('sg-wrap');
+  const pct=Math.round(sgScore/sgTotal*100);
+  const emoji = pct>=80?'🏆':pct>=60?'🌟':pct>=40?'👍':'💪';
+  const label = pct>=80?t('sg_result_great'):pct>=60?t('sg_result_good'):pct>=40?t('sg_result_ok'):t('sg_result_bad');
+  w.innerHTML=`
+    <div class="sg-result">
+      <div class="sg-result-emoji">${emoji}</div>
+      <div class="sg-result-score">${sgScore}/${sgTotal}</div>
+      <div class="sg-result-lbl">${label}</div>
+      <div class="sg-streak">🔥 ${lang==='en'?'Best streak':'Лучшая серия'}: ${sgMaxStreak}</div>
+      <button class="btn green" style="margin-bottom:10px" onclick="startSkillGame()">${t('sg_play_again')}</button>
+      <button class="btn" style="background:var(--card2);color:var(--t2);border:1px solid var(--br2)" onclick="endQuiz()">${t('sg_back')}</button>
+    </div>`;
+}
+
+// ─── INIT ───
+applyLang();
+buildSlots('enemy','enemy-slots');
+buildSlots('my','my-slots');
+buildHGrid();
+</script>
+</body>
+</html>
